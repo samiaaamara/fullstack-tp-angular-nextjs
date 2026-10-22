@@ -94,16 +94,16 @@ docker stop ngapp-container nxapp-container
 
 ## 6. Publier les images sur Docker Hub
 
-Remplacer `DOCKERHUB_USERNAME` par son nom d’utilisateur Docker Hub.
+Les images sont publiées sur le compte Docker Hub samiaaamara.
 
 ```powershell
 docker login
 
-docker build -t DOCKERHUB_USERNAME/ngapp:latest ./ngapp
-docker build -t DOCKERHUB_USERNAME/nxapp:latest ./nxapp
+docker build -t samiaaamara/ngapp:latest ./ngapp
+docker build -t samiaaamara/nxapp:latest ./nxapp
 
-docker push DOCKERHUB_USERNAME/ngapp:latest
-docker push DOCKERHUB_USERNAME/nxapp:latest
+docker push samiaaamara/ngapp:latest
+docker push samiaaamara/nxapp:latest
 ```
 
 Les dépôts Docker Hub doivent être publics pour permettre le téléchargement des images.
@@ -138,5 +138,7 @@ Les captures d’écran sont disponibles dans le dossier `screenshots/`.
 
 ## 9. Docker Hub
 
-- Image Angular : `DOCKERHUB_USERNAME/ngapp:latest`
-- Image Next.js : `DOCKERHUB_USERNAME/nxapp:latest`
+- Image Angular : `samiaaamara/ngapp:latest`
+- Image Next.js : `samiaaamara/nxapp:latest`
+
+
