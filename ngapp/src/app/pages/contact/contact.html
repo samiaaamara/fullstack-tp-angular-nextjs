@@ -1,0 +1,159 @@
+
+<div class="container py-5">
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+
+      <div class="mb-4 text-center">
+        <h2 class="fw-bold">Contact Us</h2>
+        <p *ngIf="ref" class="text-muted">
+  Origine de la visite : {{ ref }}
+</p>
+        <p class="text-muted">
+          Have a question? Send us a message.
+        </p>
+      </div>
+
+      <div class="card shadow-sm border-0 contact-card">
+        <div class="card-body p-4 p-md-5">
+
+          <!-- Success message -->
+          <div
+            *ngIf="successMessage"
+            class="alert alert-success"
+            role="alert"
+          >
+            {{ successMessage }}
+          </div>
+
+          <!-- Error message -->
+          <div
+            *ngIf="errorMessage"
+            class="alert alert-danger"
+            role="alert"
+          >
+            {{ errorMessage }}
+          </div>
+
+          <form
+            #contactForm="ngForm"
+            (ngSubmit)="onSubmit(contactForm)"
+            novalidate
+          >
+
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="name" class="form-label fw-semibold">
+                Full name
+              </label>
+
+              <input
+                id="name"
+                name="name"
+                type="text"
+                class="form-control"
+                placeholder="Enter your full name"
+                [(ngModel)]="name"
+                #nameField="ngModel"
+                required
+                minlength="2"
+                autocomplete="name"
+                [class.is-invalid]="nameField.invalid && nameField.touched"
+              >
+
+              <div
+                *ngIf="nameField.invalid && nameField.touched"
+                class="invalid-feedback"
+              >
+                <span *ngIf="nameField.errors?.['required']">
+                  Name is required.
+                </span>
+                <span *ngIf="nameField.errors?.['minlength']">
+                  Name must contain at least 2 characters.
+                </span>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="contactEmail" class="form-label fw-semibold">
+                Email address
+              </label>
+
+              <input
+                id="contactEmail"
+                name="email"
+                type="email"
+                class="form-control"
+                placeholder="Enter your email"
+                [(ngModel)]="email"
+                #emailField="ngModel"
+                required
+                email
+                autocomplete="email"
+                [class.is-invalid]="emailField.invalid && emailField.touched"
+              >
+
+              <div
+                *ngIf="emailField.invalid && emailField.touched"
+                class="invalid-feedback"
+              >
+                <span *ngIf="emailField.errors?.['required']">
+                  Email is required.
+                </span>
+                <span *ngIf="emailField.errors?.['email']">
+                  Enter a valid email address.
+                </span>
+              </div>
+            </div>
+
+            <!-- Message -->
+            <div class="mb-4">
+              <label for="message" class="form-label fw-semibold">
+                Message
+              </label>
+
+              <textarea
+                id="message"
+                name="message"
+                class="form-control"
+                rows="5"
+                placeholder="Write your message here..."
+                [(ngModel)]="message"
+                #messageField="ngModel"
+                required
+                minlength="10"
+                [class.is-invalid]="messageField.invalid && messageField.touched"
+              ></textarea>
+
+              <div
+                *ngIf="messageField.invalid && messageField.touched"
+                class="invalid-feedback"
+              >
+                <span *ngIf="messageField.errors?.['required']">
+                  Message is required.
+                </span>
+                <span *ngIf="messageField.errors?.['minlength']">
+                  Message must contain at least 10 characters.
+                </span>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <button
+  type="submit"
+  class="btn btn-primary w-100 py-2"
+  [disabled]="contactForm.invalid"
+>
+  Envoyer le message
+</button>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

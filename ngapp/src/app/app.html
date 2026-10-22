@@ -1,0 +1,75 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold" routerLink="/">
+      FullStack TP
+    </a>
+
+    <!-- Mobile menu button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation links -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <div class="navbar-nav ms-auto">
+
+        <a
+          class="nav-link"
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Home
+        </a>
+
+        <a
+          class="nav-link"
+          routerLink="/login"
+          routerLinkActive="active"
+        >
+          Login
+        </a>
+
+        <a
+          class="nav-link"
+          routerLink="/contact"
+          routerLinkActive="active"
+        >
+          Contact
+        </a>
+
+        <a
+          class="nav-link"
+          routerLink="/about"
+          routerLinkActive="active"
+        >
+          About
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<main class="container py-4">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="border-top mt-5 py-4">
+  <div class="container text-center text-muted">
+    <p class="mb-1">FullStack TP</p>
+    <small>Angular · Next.js · Bootstrap · DummyJSON API</small>
+  </div>
+</footer>

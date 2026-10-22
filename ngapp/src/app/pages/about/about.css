@@ -1,0 +1,22 @@
+
+.about-card,
+.technology-card {
+  border-radius: 16px;
+}
+
+.technology-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.technology-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.technology-icon {
+  font-size: 2.5rem;
+}
+
+.text-muted {
+  line-height: 1.7;
+}

@@ -1,0 +1,119 @@
+
+<div class="row justify-content-center py-5">
+  <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+
+    <div class="card shadow-sm border-0 login-card">
+      <div class="card-body p-4 p-md-5">
+
+        <div class="text-center mb-4">
+          <h2 class="fw-bold">Welcome Back</h2>
+          <p class="text-muted">
+            Sign in to your account
+          </p>
+        </div>
+
+        <!-- Success message -->
+        <div
+          *ngIf="successMessage"
+          class="alert alert-success"
+          role="alert"
+        >
+          {{ successMessage }}
+        </div>
+
+        <!-- Error message -->
+        <div
+          *ngIf="errorMessage"
+          class="alert alert-danger"
+          role="alert"
+        >
+          {{ errorMessage }}
+        </div>
+
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">
+              Email address
+            </label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="form-control"
+              placeholder="Enter your email"
+              [(ngModel)]="email"
+              #emailField="ngModel"
+              required
+              email
+              autocomplete="email"
+              [class.is-invalid]="emailField.invalid && emailField.touched"
+            >
+
+            <div
+              *ngIf="emailField.invalid && emailField.touched"
+              class="invalid-feedback"
+            >
+              <span *ngIf="emailField.errors?.['required']">
+                Email is required.
+              </span>
+              <span *ngIf="emailField.errors?.['email']">
+                Enter a valid email address.
+              </span>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label for="password" class="form-label fw-semibold">
+              Password
+            </label>
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="form-control"
+              placeholder="Enter your password"
+              [(ngModel)]="password"
+              #passwordField="ngModel"
+              required
+              minlength="6"
+              autocomplete="current-password"
+              [class.is-invalid]="passwordField.invalid && passwordField.touched"
+            >
+
+            <div
+              *ngIf="passwordField.invalid && passwordField.touched"
+              class="invalid-feedback"
+            >
+              <span *ngIf="passwordField.errors?.['required']">
+                Password is required.
+              </span>
+              <span *ngIf="passwordField.errors?.['minlength']">
+                Password must contain at least 6 characters.
+              </span>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="btn btn-primary w-100 py-2 mt-3"
+          >
+            Sign In
+          </button>
+
+        </form>
+
+        <p class="text-center text-muted small mt-4 mb-0">
+          Demo login form — no real authentication configured.
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+</div>

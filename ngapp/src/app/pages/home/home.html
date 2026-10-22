@@ -1,0 +1,128 @@
+
+<div class="mb-5 p-5 bg-light rounded-3">
+  <h1 class="display-5 fw-bold">Catalogue des produits</h1>
+  <p class="fs-5">
+    Découvrez nos produits depuis l'API REST DummyJSON.
+  </p>
+</div>
+
+<!-- Chargement -->
+<div *ngIf="loading" class="text-center my-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Chargement...</span>
+  </div>
+  <p class="mt-2">Chargement des produits...</p>
+</div>
+
+<!-- Erreur -->
+<div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+  {{ error }}
+
+  <button
+    class="btn btn-outline-danger btn-sm ms-3"
+    type="button"
+    (click)="loadProducts()"
+  >
+    Réessayer
+  </button>
+</div>
+
+<!-- Catalogue -->
+<div *ngIf="!loading && !error" class="row g-4">
+  <div
+    *ngFor="let product of products"
+    class="col-12 col-sm-6 col-lg-4 col-xl-3"
+  >
+   <app-product-card
+  [product]="product"
+  (addToFavorites)="addFavorite($event)">
+</app-product-card>
+ </div>
+
+  <div *ngIf="products.length === 0" class="col-12">
+    <div class="alert alert-info text-center">
+      Aucun produit trouvé.
+    </div>
+  </div>
+</div>
+
+<!-- Pagination -->
+<div
+  *ngIf="!loading && !error && totalProducts > 0"
+  class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 mt-5 mb-4"
+>
+  <p class="text-muted mb-0">
+    Page {{ currentPage }} sur {{ totalPages }}
+    — {{ totalProducts }} produits au total
+  </p>
+
+  <nav aria-label="Pagination des produits">
+    <ul class="pagination mb-0">
+      <li
+        class="page-item"
+        [class.disabled]="currentPage === 1"
+      >
+        <button
+          class="page-link"
+          type="button"
+          [disabled]="currentPage === 1 || loading"
+          (click)="changePage(currentPage - 1)"
+        >
+          Précédent
+        </button>
+      </li>
+
+      <li
+        class="page-item"
+        *ngFor="let page of pages"
+        [class.active]="currentPage === page"
+      >
+        <button
+          class="page-link"
+          type="button"
+          [disabled]="loading"
+          [attr.aria-current]="currentPage === page ? 'page' : null"
+          (click)="changePage(page)"
+        >
+          {{ page }}
+        </button>
+      </li>
+
+      <li
+        class="page-item"
+        [class.disabled]="currentPage === totalPages"
+      >
+        <button
+          class="page-link"
+          type="button"
+          [disabled]="currentPage === totalPages || loading"
+          (click)="changePage(currentPage + 1)"
+        >
+          Suivant
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
+<!-- Liste des favoris -->
+<div class="mt-5 mb-4">
+  <h2 class="h4">Mes favoris ({{ favorites.length }})</h2>
+
+  <p *ngIf="favorites.length === 0" class="text-muted">
+    Aucun favori pour le moment.
+  </p>
+
+  <ul *ngIf="favorites.length > 0" class="list-group">
+    <li
+      *ngFor="let favorite of favorites"
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      {{ favorite.title }}
+
+      <span class="badge text-bg-primary rounded-pill">
+        {{ favorite.price | currency:'USD':'symbol':'1.2-2' }}
+      </span>
+    </li>
+  </ul>
+</div>
+
