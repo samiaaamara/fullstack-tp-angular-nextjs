@@ -1,144 +1,251 @@
-﻿# Full Stack TP — Angular & Next.js
+﻿# Full Stack TP — Angular, Next.js et API REST
 
-Ce dépôt contient deux applications web développées dans le cadre du TP Full Stack.
+## Présentation du projet
 
-## Structure du projet
+Ce projet est réalisé dans le cadre du TP Full Stack. Il comprend deux applications web, une API REST et une base de données relationnelle.
+
+### Technologies utilisées
+
+- **Frontend 1 :** Angular
+- **Frontend 2 :** Next.js
+- **Backend :** Node.js, Express et TypeScript
+- **Base de données :** PostgreSQL
+- **ORM :** Prisma
+- **Validation des données :** Zod
+- **Conteneurisation :** Docker et Docker Compose
+
+## Architecture du projet
 
 ```text
 fullstack-tp/
-├── ngapp/          # Application Angular
-├── nxapp/          # Application Next.js
-├── screenshots/    # Captures d’écran du TP
+├── api/
+│   ├── prisma/
+│   ├── src/
+│   ├── Dockerfile
+│   ├── requests.http
+│   └── package.json
+├── ngapp/
+├── nxapp/
+├── screenshots/
+├── docker-compose.yml
 ├── .gitignore
 └── README.md
 ```
 
-## 1. Prérequis
+## Prérequis
 
-- Node.js et npm
+- Node.js et npm pour le développement local
 - Docker Desktop
 - Git
+- Visual Studio Code, avec une extension REST Client pour exécuter les requêtes HTTP (facultatif)
 
-## 2. Lancer Angular en développement
+## Lancer les applications avec Docker Compose
 
-```powershell
+Depuis la racine du projet :
+
+```bash
+docker compose up -d --build
+```
+
+Les images Docker des interfaces Angular et Next.js doivent être disponibles sous les noms `ngapp-image:latest` et `nxapp-image:latest`, conformément au fichier Docker Compose.
+
+Pour vérifier l'état des services :
+
+```bash
+docker compose ps
+```
+
+Pour consulter les journaux :
+
+```bash
+docker compose logs -f
+```
+
+Pour arrêter les services :
+
+```bash
+docker compose down
+```
+
+### Adresses des services
+
+| Service | Adresse |
+|---|---|
+| Application Angular | http://localhost:4200 |
+| Application Next.js | http://localhost:3000 |
+| API Express | http://localhost:4000 |
+| API produits | http://localhost:4000/api/products |
+| API catégories | http://localhost:4000/api/categories |
+| PostgreSQL | localhost:5432 |
+
+PostgreSQL est accessible depuis l'hôte sur le port 5432. Les applications et l'API communiquent dans le réseau Docker lorsque cela est nécessaire.
+
+## Développement local
+
+### Angular
+
+```bash
 cd ngapp
 npm install
 npm start
 ```
 
-Ouvrir : http://localhost:4200
+Application : http://localhost:4200
 
-Construire l’application :
+Pour compiler l'application :
 
-```powershell
+```bash
 npm run build
 ```
 
-## 3. Lancer Next.js en développement
+### Next.js
 
-```powershell
+```bash
 cd nxapp
 npm install
 npm run dev
 ```
 
-Ouvrir : http://localhost:3000
+Application : http://localhost:3000
 
-Construire et lancer en mode production :
+Pour compiler l'application :
 
-```powershell
+```bash
 npm run build
+```
+
+Pour démarrer la version compilée :
+
+```bash
 npm run start
 ```
 
-## 4. Construire les images Docker
+### API Express
 
-Depuis la racine du dépôt :
-
-```powershell
-docker build -t ngapp-image ./ngapp
-docker build -t nxapp-image ./nxapp
+```bash
+cd api
+npm install
+npm run dev
 ```
 
-## 5. Lancer les conteneurs localement
+API : http://localhost:4000
 
-Application Angular :
+Pour compiler le backend TypeScript :
 
-```powershell
-docker run -d --name ngapp-container -p 8080:80 ngapp-image
+```bash
+npm run build
 ```
 
-Application Next.js :
+Pour démarrer la version compilée :
 
-```powershell
-docker run -d --name nxapp-container -p 3001:3000 nxapp-image
+```bash
+npm start
 ```
 
-Adresses :
+Le démarrage local de l'API nécessite une configuration de base de données adaptée dans l'environnement. Ne publiez pas le fichier `.env` ni ses secrets.
 
-- Angular : http://localhost:8080
-- Next.js : http://localhost:3001
+## Fonctionnalités de l'API REST
 
-Pour vérifier les conteneurs :
+### Produits
 
-```powershell
-docker ps
+| Méthode | Route | Fonction |
+|---|---|---|
+| GET | `/api/products` | Lister les produits |
+| GET | `/api/products/:id` | Consulter un produit |
+| POST | `/api/products` | Créer un produit |
+| PUT | `/api/products/:id` | Modifier un produit |
+| DELETE | `/api/products/:id` | Supprimer un produit |
+
+### Recherche, filtrage et pagination
+
+Exemples de requêtes :
+
+```http
+GET /api/products?limit=5&skip=0
+GET /api/products?limit=5&skip=5
+GET /api/products?search=lipstick
+GET /api/products?categoryId=1
+GET /api/products?search=red&limit=2&skip=0
 ```
 
-Pour arrêter les conteneurs :
+La liste des produits renvoie notamment les propriétés `data`, `total`, `limit` et `skip`.
 
-```powershell
-docker stop ngapp-container nxapp-container
+### Catégories
+
+```http
+GET /api/categories
 ```
 
-## 6. Publier les images sur Docker Hub
+La route permet de récupérer les catégories et le nombre de produits associés à chacune.
 
-Les images sont publiées sur le compte Docker Hub samiaaamara.
+### Validation et gestion des erreurs
 
-```powershell
-docker login
+Zod valide les données reçues lors de la création et de la modification des produits. Une requête invalide, par exemple avec un prix négatif, renvoie une erreur HTTP 400.
 
-docker build -t samiaaamara/ngapp:latest ./ngapp
-docker build -t samiaaamara/nxapp:latest ./nxapp
+L'API renvoie également une erreur HTTP 404 lorsqu'un produit demandé n'existe pas.
 
-docker push samiaaamara/ngapp:latest
-docker push samiaaamara/nxapp:latest
+## Tests de l'API
+
+Le fichier `api/requests.http` contient les requêtes HTTP utilisées pour tester les fonctionnalités de l'API.
+
+Les tests réalisés comprennent :
+
+- La récupération des produits
+- La pagination
+- La recherche par mot-clé
+- Le filtrage par catégorie
+- La récupération des catégories
+- La création d'un produit
+- La validation des données avec Zod
+- La modification d'un produit
+- La suppression d'un produit
+- La vérification d'une ressource inexistante
+
+Les routes de création, de modification et de suppression ont été testées avec succès sur un produit de test.
+
+## Docker
+
+Le fichier `docker-compose.yml` définit quatre services :
+
+- `ngapp` : application Angular
+- `nxapp` : application Next.js
+- `api` : serveur Express
+- `db` : base de données PostgreSQL 17
+
+La base de données utilise un volume Docker nommé `pgdata` afin de conserver ses données au-delà de l'arrêt des conteneurs.
+
+Commandes utiles :
+
+```bash
+docker compose ps
+docker compose logs api
+docker compose logs db
+docker compose restart api
+docker compose down
 ```
 
-Les dépôts Docker Hub doivent être publics pour permettre le téléchargement des images.
+Attention : la commande `docker compose down -v` supprime également les volumes déclarés et peut entraîner la perte des données PostgreSQL.
 
-## 7. Fonctionnalités principales
+## Captures d'écran
 
-### Angular
+Le dossier `screenshots/` est prévu pour conserver les captures d'écran des interfaces et des tests.
 
-- Catalogue de produits alimenté par l’API DummyJSON
-- Pagination
-- Détail des produits
-- Formulaire de contact avec validation
-- Communication parent-enfant avec `@Input` et `@Output`
-- Liste de favoris
+Ajoutez les captures réellement disponibles, par exemple :
 
-### Next.js
+- `angular-list.png`
+- `angular-detail.png`
+- `nextjs-list.png`
+- `nextjs-detail.png`
 
-- Catalogue de produits avec l’API DummyJSON
-- Pagination par paramètre d’URL
-- Pages dynamiques de détail des produits
-- Pages de chargement, d’erreur et 404
-- Communication parent-enfant avec les props et `useState`
+Adaptez cette liste aux fichiers présents dans le dossier.
 
-## 8. Captures d’écran
+## Sécurité et configuration
 
-Les captures d’écran sont disponibles dans le dossier `screenshots/`.
+- Ne versionnez pas les fichiers `.env` contenant des secrets.
+- En production, utilisez des mots de passe et des variables d'environnement sécurisés.
+- Évitez d'exposer directement le port PostgreSQL sur un réseau public.
+- Les identifiants définis dans le fichier Docker Compose sont destinés au laboratoire local et doivent être remplacés pour un déploiement réel.
 
-- `angular-list.png` : liste des produits Angular
-- `angular-detail.png` : détail d’un produit Angular
-- `nextjs-list.png` : liste des produits Next.js
-- `nextjs-detail.png` : détail d’un produit Next.js
+## Auteur
 
-## 9. Docker Hub
-
-- Image Angular : `samiaaamara/ngapp:latest`
-- Image Next.js : `samiaaamara/nxapp:latest`
-
-
+Projet réalisé dans le cadre du TP Full Stack.

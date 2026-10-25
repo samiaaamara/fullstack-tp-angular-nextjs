@@ -1,0 +1,103 @@
+### 1. Liste des produits avec pagination
+@base = http://localhost:4000/api
+
+GET {{base}}/products?limit=5&skip=0
+
+### 2. Deuxième page
+GET {{base}}/products?limit=5&skip=5
+
+### 3. Recherche de produits
+GET {{base}}/products?search=phone
+
+### 4. Filtrage par identifiant de catégorie
+GET {{base}}/products?categoryId=1
+
+### 5. Recherche et pagination combinées
+GET {{base}}/products?search=red&limit=2&skip=0
+
+### 6. Lire un produit existant
+GET {{base}}/products/1
+
+### 7. Lire un produit inexistant : attendu 404
+GET {{base}}/products/99999
+
+### 8. Lire les catégories (si la route est implémentée)
+GET {{base}}/categories
+
+### 9. Créer un produit valide : attendu 201
+POST {{base}}/products
+Content-Type: application/json
+
+{
+  "title": "Produit test requests",
+  "description": "Produit créé pour vérifier le CRUD",
+  "price": 19.99,
+  "thumbnail": "https://cdn.dummyjson.com/product-images/1/thumbnail.webp",
+  "rating": 4.5,
+  "categoryId": 1
+}
+
+### 10. Tester la validation Zod : attendu 400
+POST {{base}}/products
+Content-Type: application/json
+
+{
+  "title": "Produit invalide",
+  "description": "",
+  "price": -10,
+  "thumbnail": "invalid",
+  "rating": 8,
+  "categoryId": 1
+}
+
+### 11. Modifier un produit : attendu 200 si l'ID existe
+PUT {{base}}/products/1
+Content-Type: application/json
+
+{
+  "title": "Produit test TP modifié",
+  "description": "Produit modifié pour vérifier la route PUT",
+  "price": 24.99,
+  "thumbnail": "https://cdn.dummyjson.com/product-images/1/thumbnail.webp",
+  "rating": 4.7,
+  "categoryId": 1
+}
+
+### 12. Supprimer un produit de test existant : attendu 204
+DELETE {{base}}/products/101
+#### 13. Supprimer un produit inexistant : attendu 404
+POST http://localhost:4000/api/products
+Content-Type: application/json
+
+{
+  "title": "Produit test requests",
+  "description": "Produit créé pour vérifier le CRUD",
+  "price": 19.99,
+  "thumbnail": "https://cdn.dummyjson.com/product-images/1/thumbnail.webp",
+  "rating": 4.5,
+  "categoryId": 1
+}
+### Vérifier le produit créé (ID 198)
+GET http://localhost:4000/api/products/198
+
+### Modifier le produit 198
+PUT http://localhost:4000/api/products/198
+Content-Type: application/json
+
+{
+  "title": "Produit test requests modifié",
+  "description": "Modification pour vérifier la route PUT",
+  "price": 29.99,
+  "thumbnail": "https://cdn.dummyjson.com/product-images/1/thumbnail.webp",
+  "rating": 4.8,
+  "categoryId": 1
+}
+
+### Supprimer le produit de test 198
+DELETE http://localhost:4000/api/products/198
+
+### Vérifier la suppression
+GET http://localhost:4000/api/products/198
+
+### Lire les catégories
+GET http://localhost:4000/api/categories
