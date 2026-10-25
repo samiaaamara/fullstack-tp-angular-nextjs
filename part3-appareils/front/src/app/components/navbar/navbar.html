@@ -1,0 +1,35 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/">
+      Gestion des appareils
+    </a>
+
+    <div class="navbar-nav ms-auto">
+      <a
+        class="nav-link"
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Accueil
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/appareils"
+        routerLinkActive="active"
+      >
+        Appareils
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/appareils/nouveau"
+        routerLinkActive="active"
+      >
+        Ajouter
+      </a>
+    </div>
+  </div>
+</nav>

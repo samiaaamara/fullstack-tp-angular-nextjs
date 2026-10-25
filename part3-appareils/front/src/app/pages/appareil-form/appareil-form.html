@@ -1,0 +1,54 @@
+
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <h1 class="text-primary fw-bold mb-4">
+      {{ modeModification() ? 'Modifier un appareil' : 'Ajouter un appareil' }}
+    </h1>
+
+    @if (loading() && modeModification()) {
+      <p class="text-secondary">Chargement de l'appareil...</p>
+    } @else {
+      @if (error()) {
+        <div class="alert alert-danger">{{ error() }}</div>
+      }
+
+      <form (ngSubmit)="enregistrer()" #formulaire="ngForm">
+        <div class="mb-3">
+          <label for="nom" class="form-label">Nom de l'appareil</label>
+          <input
+            id="nom"
+            type="text"
+            class="form-control"
+            name="nom"
+            [(ngModel)]="nom"
+            required
+            maxlength="100"
+            placeholder="Ex. : Ordinateur portable">
+        </div>
+
+        <div class="mb-4">
+          <label for="etat" class="form-label">État</label>
+          <select
+            id="etat"
+            class="form-select"
+            name="etat"
+            [(ngModel)]="etat">
+            <option value="On">Allumé</option>
+            <option value="Off">Éteint</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary me-2"
+          [disabled]="formulaire.invalid || loading()">
+          {{ loading() ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+
+        <a routerLink="/appareils" class="btn btn-outline-secondary">
+          Annuler
+        </a>
+      </form>
+    }
+  </div>
+</div>

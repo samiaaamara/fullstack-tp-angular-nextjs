@@ -1,0 +1,41 @@
+﻿
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <a routerLink="/appareils" class="btn btn-outline-secondary btn-sm mb-4">
+      Retour aux appareils
+    </a>
+
+    @if (loading()) {
+      <p class="text-secondary">Chargement de l'appareil...</p>
+    } @else if (error()) {
+      <div class="alert alert-danger">{{ error() }}</div>
+    } @else if (appareil(); as a) {
+      <h1 class="text-primary fw-bold mb-4">{{ a.name }}</h1>
+
+      <p><strong>Identifiant :</strong> {{ a._id }}</p>
+
+      <p>
+        <strong>État :</strong>
+        <span
+          class="badge"
+          [class.bg-success]="a.status === 'On'"
+          [class.bg-secondary]="a.status === 'Off'">
+          {{ a.status === 'On' ? 'Allumé' : 'Éteint' }}
+        </span>
+      </p>
+
+      @if (a.createdAt) {
+        <p>
+          <strong>Date de création :</strong>
+          {{ a.createdAt | date:'dd/MM/yyyy HH:mm' }}
+        </p>
+      }
+
+      <a
+        [routerLink]="['/appareils', a._id, 'modifier']"
+        class="btn btn-primary">
+        Modifier cet appareil
+      </a>
+    }
+  </div>
+</div>
